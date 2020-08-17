@@ -1,5 +1,5 @@
 # stickyboard-markdown
-Component base for StickyBoard
+Markdown component for StickyBoard
 
 [![Version](https://img.shields.io/npm/v/@stickyboard/markdown.svg)](https://npmjs.org/package/@stickyboard/markdown)
 [![Downloads/week](https://img.shields.io/npm/dw/@stickyboard/markdown.svg)](https://npmjs.org/package/@stickyboard/markdown)
@@ -17,7 +17,7 @@ $ npm run build
 
 # Publish to npm
 ```bsh
-$ npm publish --access public
+$ npm run publish
 ```
 
 # License
