@@ -3,8 +3,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import ReactMarkdown from 'react-markdown';
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+    height: 100%;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: left;
+    background-color: #FFDAD3;
+    border-radius: 16px;
+    overflow: auto;
+`;
 
 class Markdown extends React.Component {
     constructor(props) {
@@ -14,10 +25,17 @@ class Markdown extends React.Component {
     }
 
     render() {
-        return <Wrapper></Wrapper>;
+        const { content } = this.props;
+        return (
+          <Wrapper>
+            <ReactMarkdown source={content}/>
+          </Wrapper>
+        );
     }
 }
 
-Markdown.propTypes = {};
+Markdown.propTypes = {
+  content: PropTypes.string
+};
 
 export default Markdown;
