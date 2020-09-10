@@ -88,17 +88,21 @@ class Markdown extends React.Component {
     }
 
     render() {
-        const { buttonLabel } = this.state;     
+        const { buttonLabel } = this.state;   
+        const { editActive }  = this.props;
         const editType = this.getEditType();
 
         return (
           <Wrapper>
-            <ButtonWrapeer>
-              <Button onClick={() => this.buttonClick()}>
-                {buttonLabel}
-              </Button>              
-            </ButtonWrapeer>
-
+            {
+              editActive && (
+                <ButtonWrapeer>
+                  <Button onClick={() => this.buttonClick()}>
+                    {buttonLabel}
+                  </Button>              
+                </ButtonWrapeer>
+              )
+            }
             { editType }
           </Wrapper>
         );
@@ -107,7 +111,8 @@ class Markdown extends React.Component {
 
 Markdown.propTypes = {
   content: PropTypes.string,
-  onSave : PropTypes.func
+  onSave : PropTypes.func,
+  editActive : PropTypes.bool
 };
 
 export default Markdown;
