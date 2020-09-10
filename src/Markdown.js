@@ -55,34 +55,34 @@ class Markdown extends React.Component {
       const { content, buttonType } = this.state;
       const { onSave } = this.props;  
 
-      if(buttonType){
+      if (buttonType) {
         onSave(content);
         this.setState({
           buttonType: false,
           buttonLabel: 'Edit'
         });
-      }else{
+      } else {
         this.setState({
           buttonType: true,
           buttonLabel: 'Save'
-        })
+        });
       }
     }
 
     getEditType(){
       const { content, buttonType } = this.state;
 
-      if(buttonType){
+      if (buttonType) {
         return (
           <Editer 
             onChange={(e) => {
               this.setState({
                 content: e.target.value
-              })
+              });
             }}
             value={content} />
         );
-      }else{
+      } else {
         return (<ReactMarkdown source={content} />);
       }
     }
