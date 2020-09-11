@@ -13,30 +13,43 @@ const Wrapper = styled.div`
     flex-direction: column;
     align-items: left;
     justify-content: left;
-    background-color: #FFDAD3;
     border-radius: 16px;
     overflow: auto;
+    border: 0.5px solid #9b9b9b;
 `;
 
-const ButtonWrapeer = styled.div`
-    font: 1em;
-    text-align: right;
-    position: fix;
+const MenuContainer = styled.div`
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
 `;
 
-const Button = styled.button`
-    background-color: #5287FA; 
-    color: black;
-    border: none;
-    border-radius: 3px;
+const MenuButton = styled.button`
+    width: 100%;
+    padding: 4px 8px;
+    &:not(:last-child) {
+        margin-bottom: 8px;
+    }
+    border: 1px solid #bbbbbb;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #333333;
+    background-color: #ffffff;
 `;
 
-const Editer = styled(TextareaAutosize)`
+const Editor = styled(TextareaAutosize)`
+    font-size: 16px;
+    color: #333333;
     resize: none;
-    background-color:transparent; 
+    background-color: transparent;
     border: 0;
-    &:focus{
-      outline: none;
+    &:focus {
+        outline: none;
     }
 `;
 
@@ -45,74 +58,62 @@ class Markdown extends React.Component {
         super(props);
 
         this.state = {
-            buttonType: false,
-            buttonLabel : 'Edit',
-            content : this.props.content
+            isEditMode: false,
+            contentCopy: props.content,
         };
     }
 
-    buttonClick() {
-      const { content, buttonType } = this.state;
-      const { onSave } = this.props;  
+    toggleEditMode = () => {
+        this.setState(
+            (prevState) => ({
+                isEditMode: !prevState.isEditMode,
+            }),
+            () => {
+                const { isEditMode, contentCopy } = this.state;
+                const { onSave } = this.props;
 
-      if (buttonType) {
-        onSave(content);
-        this.setState({
-          buttonType: false,
-          buttonLabel: 'Edit'
-        });
-      } else {
-        this.setState({
-          buttonType: true,
-          buttonLabel: 'Save'
-        });
-      }
-    }
-
-    getEditType(){
-      const { content, buttonType } = this.state;
-
-      if (buttonType) {
-        return (
-          <Editer 
-            onChange={(e) => {
-              this.setState({
-                content: e.target.value
-              });
-            }}
-            value={content} />
+                if (!isEditMode && onSave && typeof onSave === 'function') {
+                    onSave(contentCopy);
+                }
+            }
         );
-      } else {
-        return (<ReactMarkdown source={content} />);
-      }
-    }
+    };
+
+    onChangeContent = (event) => {
+        this.setState({
+            contentCopy: event.target.value,
+        });
+    };
 
     render() {
-        const { buttonLabel } = this.state;   
-        const { editActive }  = this.props;
-        const editType = this.getEditType();
+        const { isEditMode } = this.state;
+        const { editable, content, onSave } = this.props;
 
         return (
-          <Wrapper>
-            {
-              editActive && (
-                <ButtonWrapeer>
-                  <Button onClick={() => this.buttonClick()}>
-                    {buttonLabel}
-                  </Button>              
-                </ButtonWrapeer>
-              )
-            }
-            { editType }
-          </Wrapper>
+            <Wrapper>
+                {isEditMode ? (
+                    <Editor onChange={this.onChangeContent} value={content} />
+                ) : (
+                    <ReactMarkdown source={content} />
+                )}
+
+                {/* Menu */}
+                {editable && (
+                    <MenuContainer>
+                        <MenuButton onClick={() => this.toggleEditMode()}>
+                            {isEditMode ? 'Save' : 'Edit'}
+                        </MenuButton>
+                    </MenuContainer>
+                )}
+            </Wrapper>
         );
     }
 }
 
 Markdown.propTypes = {
-  content: PropTypes.string,
-  onSave : PropTypes.func,
-  editActive : PropTypes.bool
+    editable: PropTypes.bool,
+    content: PropTypes.string,
+    onSave: PropTypes.func,
 };
 
 export default Markdown;
