@@ -59,7 +59,7 @@ class Markdown extends React.Component {
 
         this.state = {
             isEditMode: false,
-            contentCopy: props.content,
+            contentForEdit: props.content,
         };
     }
 
@@ -69,11 +69,11 @@ class Markdown extends React.Component {
                 isEditMode: !prevState.isEditMode,
             }),
             () => {
-                const { isEditMode, contentCopy } = this.state;
+                const { isEditMode, contentForEdit } = this.state;
                 const { onSave } = this.props;
 
                 if (!isEditMode && onSave && typeof onSave === 'function') {
-                    onSave(contentCopy);
+                    onSave(contentForEdit);
                 }
             }
         );
@@ -81,18 +81,18 @@ class Markdown extends React.Component {
 
     onChangeContent = (event) => {
         this.setState({
-            contentCopy: event.target.value,
+            contentForEdit: event.target.value,
         });
     };
 
     render() {
-        const { isEditMode } = this.state;
+        const { isEditMode, contentForEdit } = this.state;
         const { editable, content, onSave } = this.props;
 
         return (
             <Wrapper>
                 {isEditMode ? (
-                    <Editor onChange={this.onChangeContent} value={content} />
+                    <Editor onChange={this.onChangeContent} value={contentForEdit} />
                 ) : (
                     <ReactMarkdown source={content} />
                 )}
