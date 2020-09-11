@@ -18,24 +18,28 @@ $ npm start
 $ npm run build
 ```
 
-# Basic usage
-
+# Usage example
 ```javascript
+import React, { useState } from 'react';
 import { Markdown } from '@stickyboard/markdown';
 
-function MarkdownUsage() {
-    const content = '# header1\n## header2\n### header3';
+function SampleMarkdown(props) {
+    const [content, setContent] = useState(
+        "# Header1\n## Header2\n### Header3"
+    );
 
     return (
         <Markdown
             editable
             content={content}
             onSave={(content) => {
-                // TODO: Save your content
+                setContent(content);
             }}
         />
     );
 }
+
+export default SampleMarkdown;
 ```
 
 # License
